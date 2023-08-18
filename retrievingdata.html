@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form id="userForm">
+        <label for="username">Name</label>
+        <input type="text" id="username" name="username">
+        <label for="email">EmailId</label>
+        <input type="text" id="email" name="email">
+        <label for="phone">Phone Number</label>
+        <input type="text" id="phone" name="phone">
+        <button type="submit">Submit</button>
+    </form>
+    
+    <ul id="userList"></ul>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.23.0/axios.min.js"></script>
+    <script>
+        const userForm = document.getElementById('userForm');
+        const userList = document.getElementById('userList');
+
+        userForm.addEventListener('submit', saveToLocalStorage);
+
+        function saveToLocalStorage(event) {
+            event.preventDefault();
+            const name = event.target.username.value;
+            const email = event.target.email.value;
+            const phone = event.target.phone.value;
+            const obj = {
+                name,
+                email,
+                phone
+            };
+
+            axios.post("https://crudcrud.com/api/5113977a47c541d794310986c18d6f13/AppointmentData", obj)
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+            showNewUserOnScreen(obj);
+            userForm.reset();
+        }
+
+        function showNewUserOnScreen(user) {
+            const listItem = document.createElement('li');
+            listItem.innerHTML = `
+                <span>Name: ${user.name}</span>
+                <span>Email: ${user.email}</span>
+                <span>Phone: ${user.phone}</span>
+                <button onclick="editUser('${user.email}')">Edit</button>
+                <button onclick="deleteUser('${user.email}')">Delete</button>
+            `;
+            userList.appendChild(listItem);
+        }
+
+        function deleteUser(email) {
+        }
+
+        function editUser(email) {
+        
+        }
+
+        
+        window.addEventListener("DOMContentLoaded", () => {
+            axios.get("https://crudcrud.com/api/5113977a47c541d794310986c18d6f13/appointmentData")
+            .then((respons) =>{
+                console.log(respons)
+                
+            })
+            .catch((error) =>{
+                console.log(error)
+            })
+        });
+    </script>
+</body>
+</html>
